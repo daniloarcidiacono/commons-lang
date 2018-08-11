@@ -23,7 +23,7 @@
         </developer>
     </developers>
     <scm>
-        <connection>scm:git:git://github.com/daniloarcidiacono/commons-lang.git</connection>
+        <connection>scm:git:git@github.com:daniloarcidiacono/commons-lang.git</connection>
         <developerConnection>scm:git:git@github.com:daniloarcidiacono/commons-lang.git</developerConnection>
         <url>https://github.com/daniloarcidiacono/commons-lang.git</url>
     </scm>
