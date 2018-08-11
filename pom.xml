@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.daniloarcidiacono</groupId>
     <artifactId>commons-lang</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>jar</packaging>
     <name>Java Language utilities</name>
     <description>Java Language utilities</description>
