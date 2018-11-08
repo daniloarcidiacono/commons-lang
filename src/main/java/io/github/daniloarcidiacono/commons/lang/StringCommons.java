@@ -85,4 +85,16 @@ public abstract class StringCommons {
         sb.append(" }");
         return sb.toString();
     }
+
+    public static String singleQuote(final String str) {
+        return quote(str,"'");
+    }
+
+    public static String doubleQuote(final String str) {
+        return quote(str,"\"");
+    }
+
+    public static String quote(final String str, final String quote) {
+        return quote + str + quote;
+    }
 }
