@@ -15,6 +15,7 @@ public abstract class FileCommons {
      * Deletes Folder with all of its content.
      * Symbolic links are NOT followed.
      * @param folder path to folder which should be deleted
+     * @throws IOException
      */
     public static void deleteFolder(final Path folder) throws IOException {
         if (!Files.exists(folder) || !Files.isDirectory(folder)) {

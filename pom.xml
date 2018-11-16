@@ -54,7 +54,7 @@
         <maven-source.plugin.version>3.0.1</maven-source.plugin.version>
         <maven-javadoc.plugin.version>2.10.4</maven-javadoc.plugin.version>
         <maven-gpg.plugin.version>1.6</maven-gpg.plugin.version>
-        <jacoco.plugin.version>0.7.9</jacoco.plugin.version>
+        <jacoco.plugin.version>0.8.2</jacoco.plugin.version>
         <asciidoctor-maven.plugin.version>1.5.6</asciidoctor-maven.plugin.version>
         <asciidoctorj.pdf.version>1.5.0-alpha.16</asciidoctorj.pdf.version>
     </properties>
@@ -183,6 +183,35 @@
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
+
+                    <!-- (3) the check goal by default runs in the verify phase, we want to fail the build if mimimum code coverage checks aren't met -->
+                    <execution>
+                        <id>check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <!-- All classes must have 80% line and branch coverage . Note we use 2 d.p so that we get can any check failure messages reported to 2 d.p  -->
+                                <rule>
+                                    <element>CLASS</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.80</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.80</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+
                     <execution>
                         <id>report</id>
                         <phase>test</phase>

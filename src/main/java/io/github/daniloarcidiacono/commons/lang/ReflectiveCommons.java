@@ -40,7 +40,7 @@ public abstract class ReflectiveCommons {
 
     /**
      * Returns the list of the classes enclosing the specified class.
-     * @param clazz
+     * @param clazz the starting class
      * @return the list of the classes enclosing the specified class.
      */
     public static List<Class<?>> getEnclosingClasses(final Class<?> clazz) {
