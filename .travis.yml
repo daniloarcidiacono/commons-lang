@@ -4,7 +4,8 @@ jdk: oraclejdk8
 # faster builds
 sudo: false
 
-script: mvn clean package
+script:
+  - mvn clean verify package
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
