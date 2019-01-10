@@ -1,4 +1,4 @@
-package io.github.daniloarcidiacono.commons.lang;
+package io.github.daniloarcidiacono.commons.lang.patterns;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,8 +8,6 @@ import java.util.List;
 /**
  * Base class for an object which aggregates a list of elements.
  * @param <T> type of the component
- *
- * @author Danilo Arcidiacono
  */
 public class Composite<T> {
     protected List<T> components = new ArrayList<>();

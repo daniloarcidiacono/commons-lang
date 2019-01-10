@@ -8,7 +8,6 @@ import java.util.List;
 
 /**
  * Miscellaneous Java Reflection utility methods.
- * @author Danilo Arcidiacono
  */
 public abstract class ReflectiveCommons {
     /**

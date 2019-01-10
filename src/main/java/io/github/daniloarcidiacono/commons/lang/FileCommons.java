@@ -7,8 +7,6 @@ import java.util.Scanner;
 
 /**
  * Miscellaneous Java file utility methods.
- *
- * @author Danilo Arcidiacono
  */
 public abstract class FileCommons {
     /**
@@ -44,7 +42,7 @@ public abstract class FileCommons {
     }
 
     /**
-     * Reads a text file from the given path
+     * Reads a text file from the given path.
      * @see <a href="https://stackoverflow.com/questions/6068197/utils-to-read-resource-text-file-to-string-java">Utils to read resource text file to String (Java)</a>
      * @param path the path to load
      * @return the file content

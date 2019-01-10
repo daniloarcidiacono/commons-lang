@@ -7,8 +7,6 @@ package io.github.daniloarcidiacono.commons.lang;
  * <p>This class delivers some simple functionality that should really be
  * provided by the core Java {@link String} and {@link StringBuilder}
  * classes.
- *
- * @author Danilo Arcidiacono
  */
 public abstract class StringCommons {
     /**
