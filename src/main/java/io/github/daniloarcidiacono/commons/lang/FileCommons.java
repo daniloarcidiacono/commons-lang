@@ -1,6 +1,7 @@
 package io.github.daniloarcidiacono.commons.lang;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Scanner;
@@ -45,10 +46,15 @@ public abstract class FileCommons {
      * Reads a text file from the given path.
      * @see <a href="https://stackoverflow.com/questions/6068197/utils-to-read-resource-text-file-to-string-java">Utils to read resource text file to String (Java)</a>
      * @param path the path to load
-     * @return the file content
+     * @return the file content, or null if could not be loaded.
      */
     public static String loadResource(final String path) {
-        final Scanner scanner = new Scanner(FileCommons.class.getClassLoader().getResourceAsStream(path), "UTF-8").useDelimiter("\\A");
+        final InputStream resourceAsStream = FileCommons.class.getClassLoader().getResourceAsStream(path);
+        if (resourceAsStream == null) {
+            return null;
+        }
+
+        final Scanner scanner = new Scanner(resourceAsStream, "UTF-8").useDelimiter("\\A");
 
         if (scanner.hasNext()) {
             return scanner.next();
