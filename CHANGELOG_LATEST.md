@@ -1,4 +1,4 @@
-# commons-lang 0.1.0 (2019-01-12)
+# commons-lang 0.1.0
 
 ### Features
 
@@ -10,10 +10,3 @@
 * **chore:** Add `CHANGELOG` and `CODEOWNERS` files
 * **build:** Add test coverage constraints
 * **build:** Add `docs` and `ossrh` Maven profiles 
-
-# commons-lang 0.0.1 (2018-08-18)
-
-### Features
-
-* `StringCommons` utility class for manipulating strings
-* `ReflectiveCommons` utility class for reflection
