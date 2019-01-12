@@ -7,8 +7,6 @@ package io.github.daniloarcidiacono.commons.lang;
  * <p>This class delivers some simple functionality that should really be
  * provided by the core Java {@link String} and {@link StringBuilder}
  * classes.
- *
- * @author Danilo Arcidiacono
  */
 public abstract class StringCommons {
     /**
@@ -84,5 +82,17 @@ public abstract class StringCommons {
 
         sb.append(" }");
         return sb.toString();
+    }
+
+    public static String singleQuote(final String str) {
+        return quote(str,"'");
+    }
+
+    public static String doubleQuote(final String str) {
+        return quote(str,"\"");
+    }
+
+    public static String quote(final String str, final String quote) {
+        return quote + str + quote;
     }
 }

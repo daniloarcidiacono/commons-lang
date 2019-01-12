@@ -4,15 +4,15 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for {@link ReflectiveCommons} class.
- *
- * @author Danilo Arcidiacono
  */
 class ReflectiveCommonsTest {
     @Retention(RetentionPolicy.RUNTIME)
@@ -68,6 +68,14 @@ class ReflectiveCommonsTest {
         assertFalse(
             annotatedMethods.contains(Derived.class.getMethod("myOtherDerivedMethod")),
             "Methods without the specified annotation are not picked"
+        );
+    }
+
+    @Test
+    void getEnclosingClasses() {
+        assertEquals(
+            Arrays.asList(ReflectiveCommonsTest.class, Base.class),
+            ReflectiveCommons.getEnclosingClasses(Base.class)
         );
     }
 }

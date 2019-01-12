@@ -3,43 +3,39 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>io.github.daniloarcidiacono</groupId>
     <artifactId>commons-lang</artifactId>
-    <version>0.0.1</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
     <name>Java Language utilities</name>
     <description>Java Language utilities</description>
     <url>http://github.com/daniloarcidiacono/commons-lang</url>
+
     <licenses>
         <license>
             <name>MIT License</name>
             <url>http://www.opensource.org/licenses/mit-license.php</url>
         </license>
     </licenses>
+
     <developers>
         <developer>
             <name>Danilo Arcidiacono</name>
             <email>danilo.arcidiacono@gmail.com</email>
         </developer>
     </developers>
+
     <scm>
         <connection>scm:git:git@github.com:daniloarcidiacono/commons-lang.git</connection>
         <developerConnection>scm:git:git@github.com:daniloarcidiacono/commons-lang.git</developerConnection>
         <url>https://github.com/daniloarcidiacono/commons-lang.git</url>
     </scm>
+
     <issueManagement>
         <url>https://github.com/daniloarcidiacono/commons-lang</url>
     </issueManagement>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
@@ -47,15 +43,21 @@
         <!-- Dependencies -->
         <junit.bom.version>5.2.0</junit.bom.version>
         <junit.platform.version>1.2.0</junit.platform.version>
+        <memoryfilesystem.version>1.3.0</memoryfilesystem.version>
 
         <!-- Plugins -->
         <maven-compiler.plugin.version>3.7.0</maven-compiler.plugin.version>
-        <maven-surefire.plugin.version>2.21.0</maven-surefire.plugin.version>
+        <maven-surefire.plugin.version>2.22.0</maven-surefire.plugin.version>
         <maven-source.plugin.version>3.0.1</maven-source.plugin.version>
-        <maven-javadoc.plugin.version>2.10.4</maven-javadoc.plugin.version>
-        <maven-gpg.plugin.version>1.6</maven-gpg.plugin.version>
-        <maven-release.plugin.version>2.5.3</maven-release.plugin.version>
+        <versions-maven.plugin.version>2.7</versions-maven.plugin.version>
+        <jacoco.plugin.version>0.8.2</jacoco.plugin.version>
+
+        <!-- Constraints -->
+        <!-- Note we use 2 d.p so that we get can any check failure messages reported to 2 d.p. -->
+        <line.coverage.ratio>0.80</line.coverage.ratio>
+        <branch.coverage.ratio>0.50</branch.coverage.ratio>
     </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -67,13 +69,143 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.marschall</groupId>
+            <artifactId>memoryfilesystem</artifactId>
+            <version>${memoryfilesystem.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>docs</id>
+            <properties>
+                <!-- Plugin -->
+                <maven-javadoc.plugin.version>2.10.4</maven-javadoc.plugin.version>
+            </properties>
+            <build>
+                <plugins>
+                    <!-- Export Javadoc -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>ossrh</id>
+
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+
+            <properties>
+                <!-- Plugins -->
+                <nexus-staging-maven.plugin.version>1.6.8</nexus-staging-maven.plugin.version>
+                <maven-gpg.plugin.version>1.6</maven-gpg.plugin.version>
+            </properties>
+
+            <build>
+                <plugins>
+                    <!-- GPG signatures -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven-gpg.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!--
+                        The maven-deploy-plugin is a viable option to handle the task of deploying to artifacts of a project to
+                        Nexus, but it was not built to take full advantage of what Nexus has to offer.
+                        Because of that fact, Sonatype built a Nexus specific plugin – the nexus-staging-maven-plugin –
+                        that is actually designed to take full advantage of the more advanced functionality that Nexus has to
+                        offer – functionality such as staging.
+
+                        The only reason to use the maven-deploy-plugin is to keep open the option of using an alternative to Nexus in
+                        the future – for example, an Artifactory repository. However, unlike other components that may actually change
+                        throughout the lifecycle of a project, the Maven Repository Manager is highly unlikely to change,
+                        so that flexibility is not required.
+
+                        So, the first step in using another deployment plugin in the deploy phase is to disable the existing, default
+                        mapping:
+                    -->
+                    <plugin>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>${nexus-staging-maven.plugin.version}</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <!--<autoReleaseAfterClose>true</autoReleaseAfterClose>-->
+                            <!--<autoDropAfterRelease>true</autoDropAfterRelease>-->
+                            <!--
+                                If true, will not locally stage. This triggers basically equivalent
+                                behaviour to maven-deploy-plugin, each deploy will happen "directly",
+                                at the end of the each module build.
+                            -->
+                            <!--<skipLocalStaging>true</skipLocalStaging>-->
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>deploy-to-sonatype</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                    <!--<goal>close</goal>-->
+                                    <!--<goal>release</goal>-->
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <!-- Compiler -->
@@ -102,21 +234,6 @@
                 </executions>
             </plugin>
 
-            <!-- Export Javadoc -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${maven-javadoc.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Test runner -->
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -130,27 +247,64 @@
                 </dependencies>
             </plugin>
 
-            <!-- Releases -->
+            <!-- Test coverage -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>${maven-release.plugin.version}</version>
-            </plugin>
-
-            <!-- GPG signatures -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>${maven-gpg.plugin.version}</version>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
+                        <id>default-prepare-agent</id>
                         <goals>
-                            <goal>sign</goal>
+                            <goal>prepare-agent</goal>
                         </goals>
                     </execution>
+
+                    <execution>
+                        <id>default-report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+
+                    <!--
+                        The check goal by default runs in the verify phase,
+                        we want to fail the build if mimimum code coverage checks aren't met.
+                    -->
+                    <execution>
+                        <id>default-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <!-- Constraint on line and branch coverage of all classes -->
+                                <rule>
+                                    <element>CLASS</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${line.coverage.ratio}</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${branch.coverage.ratio}</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
                 </executions>
+            </plugin>
+
+            <!-- Versioning -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>${versions-maven.plugin.version}</version>
             </plugin>
         </plugins>
     </build>

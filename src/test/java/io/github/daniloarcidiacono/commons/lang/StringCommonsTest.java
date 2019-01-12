@@ -8,8 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link StringCommons} class.
- *
- * @author Danilo Arcidiacono
  */
 class StringCommonsTest {
     @Test
@@ -38,5 +36,12 @@ class StringCommonsTest {
         assertEquals(StringCommons.listToString(Arrays.asList()), "{  }");
         assertEquals(StringCommons.listToString(Arrays.asList( "first" )), "{ first }");
         assertEquals(StringCommons.listToString(Arrays.asList( "first", "second" )), "{ first, second }");
+    }
+
+    @Test
+    void quotes() {
+        assertEquals(StringCommons.singleQuote("test"), "'test'");
+        assertEquals(StringCommons.doubleQuote("test"), "\"test\"");
+        assertEquals(StringCommons.quote("test", "*"), "*test*");
     }
 }

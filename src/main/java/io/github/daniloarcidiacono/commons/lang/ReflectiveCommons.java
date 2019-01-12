@@ -8,8 +8,6 @@ import java.util.List;
 
 /**
  * Miscellaneous Java Reflection utility methods.
- *
- * @author Danilo Arcidiacono
  */
 public abstract class ReflectiveCommons {
     /**
@@ -37,5 +35,22 @@ public abstract class ReflectiveCommons {
         }
 
         return methods;
+    }
+
+    /**
+     * Returns the list of the classes enclosing the specified class.
+     * @param clazz the starting class
+     * @return the list of the classes enclosing the specified class.
+     */
+    public static List<Class<?>> getEnclosingClasses(final Class<?> clazz) {
+        final List<Class<?>> enclosingClasses = new ArrayList<>();
+
+        Class<?> current = clazz;
+        do {
+            enclosingClasses.add(0, current);
+            current = current.getEnclosingClass();
+        } while (current != null);
+
+        return enclosingClasses;
     }
 }
