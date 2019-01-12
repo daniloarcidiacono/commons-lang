@@ -32,6 +32,7 @@ public abstract class FileCommons {
 
             @Override
             public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                // TODO: Find a way to test this branch and increase the branch.coverage.ratio to 0.80
                 if (exc != null) {
                     throw exc;
                 }

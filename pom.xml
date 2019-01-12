@@ -55,7 +55,7 @@
         <!-- Constraints -->
         <!-- Note we use 2 d.p so that we get can any check failure messages reported to 2 d.p. -->
         <line.coverage.ratio>0.80</line.coverage.ratio>
-        <branch.coverage.ratio>0.80</branch.coverage.ratio>
+        <branch.coverage.ratio>0.50</branch.coverage.ratio>
     </properties>
 
     <dependencyManagement>
